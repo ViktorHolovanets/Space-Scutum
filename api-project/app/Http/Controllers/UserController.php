@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\ResponseHelpers;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\Request;
@@ -33,7 +34,7 @@ class UserController extends Controller
 
         $user->update($validatedData);
 
-        return response()->json(['status' => 'success', 'message' => 'User updated successfully', 'user' => $user]);
+       return ResponseHelpers::success($user,'User updated successfully');
     }
 
     /**
@@ -43,6 +44,6 @@ class UserController extends Controller
     {
         $user = Auth::user();
         $user->delete();
-        return response()->json(['status' => 'success', 'message' => 'User deleted successfully']);
+        return ResponseHelpers::success(null,'User deleted successfully');
     }
 }
