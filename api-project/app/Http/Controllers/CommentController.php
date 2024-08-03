@@ -33,7 +33,7 @@ class CommentController extends Controller
             'body' => 'required|string',
             'post_id' => 'required|uuid',
         ]);
-        $user = Auth::user();
+        $user = auth('api')->user();
         $post = Post::find($validated['post_id']);
         if (!$post) {
             return ResponseHelpers::badRequest();
@@ -66,7 +66,7 @@ class CommentController extends Controller
             'user_id' => 'uuid|exists:users,id'
         ]);
 
-        $user = Auth::user();
+        $user = auth('api')->user();
         $comment = Comment::findOrFail($id);
         $post = Post::findOrFail($validated['post_id']);
 
@@ -88,7 +88,7 @@ class CommentController extends Controller
     public function destroy($id)
     {
         $coment = Comment::findOrFail($id);
-        $user = Auth::user();
+        $user = auth('api')->user();
         if ($user->id != $coment->user_id)
             ResponseHelpers::unauthorized();
         $coment->delete();

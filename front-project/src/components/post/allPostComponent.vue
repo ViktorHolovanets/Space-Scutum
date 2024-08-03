@@ -3,7 +3,7 @@ import cardPostComponent from './cardPostComponent.vue';
 import { usePostsStore } from '@/stores/posts';
 
 const postsStore = usePostsStore();
-postsStore.loadPosts();
+postsStore.loadPosts(1);
 
 </script>
 <template>

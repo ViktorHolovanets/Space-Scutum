@@ -19,7 +19,7 @@ class UserController extends Controller
      */
     public function update(Request $request)
     {
-        $user = Auth::user(); 
+        $user = auth('api')->user();
       
         
         $validatedData = $request->validate([
@@ -42,7 +42,7 @@ class UserController extends Controller
      */
     public function destroy()
     {
-        $user = Auth::user();
+        $user = auth('api')->user();
         $user->delete();
         return ResponseHelpers::success(null,'User deleted successfully');
     }

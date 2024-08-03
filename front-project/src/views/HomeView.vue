@@ -2,6 +2,7 @@
 import backgroundComponent from '@/components/backgroundComponent.vue';
 import headComponent from '@/components/header/headerComponent.vue';
 import allPostComponent from '@/components/post/allPostComponent.vue';
+import NewPostComponent from '@/components/post/newPostComponent.vue';
 
 </script>
 
@@ -10,5 +11,6 @@ import allPostComponent from '@/components/post/allPostComponent.vue';
   <div class="max-w-screen-xl my-8 mx-auto">
     <headComponent />
     <allPostComponent />
+    <NewPostComponent/>
   </div>
 </template>

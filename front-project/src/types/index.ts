@@ -42,3 +42,9 @@ export interface Comment {
     user: User;
     comments: Comment[];
   }
+  export interface PaginatedPostsResponse {
+    data: Post[];
+    total: number;
+    current_page: number;
+    last_page: number;
+  }

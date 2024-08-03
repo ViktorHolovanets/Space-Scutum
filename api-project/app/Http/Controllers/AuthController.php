@@ -29,7 +29,7 @@ class AuthController extends Controller
             return ResponseHelpers::unauthorized();
         }
 
-        $user = Auth::user();
+        $user = auth('api')->user();
         return ResponseHelpers::success([
             'status' => 'success',
             'user' => $user,
@@ -67,7 +67,7 @@ class AuthController extends Controller
 
     public function logout()
     {
-        Auth::logout();
+        auth('api')->logout();
         return ResponseHelpers::success([
             'status' => 'success',
             'message' => 'Successfully logged out',
@@ -77,7 +77,7 @@ class AuthController extends Controller
     public function refresh()
     {
         return ResponseHelpers::success([
-            'user' => Auth::user(),
+            'user' => $user = auth('api')->user(),
             'authorisation' => [
                 'token' => Auth::refresh(),
                 'type' => 'bearer',

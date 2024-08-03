@@ -14,7 +14,7 @@ export async function updateUser(data: { name?: string; email?: string; password
 
 export async function deleteUser() {
   try {
-    const response = await api.delete('/user/delete');
+    const response = await api.delete('/user');
     return handleResponse(response);
   } catch (error) {
     console.error('Delete user error:', error);

@@ -2,20 +2,23 @@ import { defineStore } from 'pinia';
 import { ref } from 'vue';
 import { login, register, logout, refresh } from '@/api/auth';
 import type { User } from '@/types';
+import { deleteUser } from '@/api/user';
 
 
 export const useAuthStore = defineStore('auth', () => {
   const user = ref<User | null>(null);
-  const token = ref<string | null>(null);
+  const token = ref<string | null>(localStorage.getItem('token')??null);
+  const IsActive = ref<Boolean>(false);
   const status = ref<string>('idle'); // idle, loading, success, error
 
   const loginUser = async (email: string, password: string) => {
     status.value = 'loading';
     try {
       const response = await login(email, password);
-      console.log(response);
+      
       user.value = response.user;
       token.value = response.authorisation?.token || null;
+      IsActive.value=true;
       localStorage.setItem('token', token.value || '');
       status.value = 'success';
     } catch (error) {
@@ -28,6 +31,7 @@ export const useAuthStore = defineStore('auth', () => {
     status.value = 'loading';
     try {
       const response = await register(name, email, password);
+      IsActive.value=true;
       user.value = response.user;
       token.value = response.authorisation?.token || null;
       localStorage.setItem('token', token.value || '');
@@ -42,9 +46,7 @@ export const useAuthStore = defineStore('auth', () => {
     status.value = 'loading';
     try {
       await logout();
-      user.value = null;
-      token.value = null;
-      localStorage.removeItem('token');
+      NullableUser();
       status.value = 'success';
     } catch (error) {
       status.value = 'error';
@@ -52,6 +54,23 @@ export const useAuthStore = defineStore('auth', () => {
     }
   };
 
+  const DeleteUser = async () => {
+    status.value = 'loading';
+    try {
+      await deleteUser();
+      NullableUser();
+      status.value = 'success';
+    } catch (error) {
+      status.value = 'error';
+      console.error('Logout error:', error);
+    }
+  };
+  const NullableUser = async () => {
+      user.value = null;
+      token.value = null;
+      IsActive.value=false;
+      localStorage.removeItem('token');
+  };
   const refreshToken = async () => {
     status.value = 'loading';
     try {
@@ -66,5 +85,5 @@ export const useAuthStore = defineStore('auth', () => {
     }
   };
 
-  return { user, token, status, loginUser, registerUser, logoutUser, refreshToken };
+  return { user, token, status,IsActive, loginUser, registerUser, logoutUser, refreshToken, DeleteUser };
 });

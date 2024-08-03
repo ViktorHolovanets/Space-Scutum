@@ -20,7 +20,13 @@ class PostController extends Controller
      */
     public function index()
     {
-        return ResponseHelpers::success(PostResource::collection(Post::with("user")->latest()->paginate(10)));
+        $posts = Post::with("user")->latest()->paginate(10);
+        return ResponseHelpers::success([
+            'data' => PostResource::collection($posts->items()),
+            'total' => $posts->total(),
+            'current_page' => $posts->currentPage(),
+            'last_page' => $posts->lastPage(),
+        ]);
     }
 
     /**
@@ -33,7 +39,7 @@ class PostController extends Controller
             'body' => 'required|string',
         ]);
 
-        $user = Auth::user();
+        $user = auth('api')->user();
 
         $post = Post::create([
             'id' => (string) Str::uuid(),
@@ -62,7 +68,7 @@ class PostController extends Controller
             'body' => 'string',
             'user_id' => 'uuid|exists:users,id',
         ]);
-        $user = Auth::user();
+        $user = auth('api')->user();
         if ($user->id != $validated['user_id'])
             ResponseHelpers::unauthorized();
         $post = Post::findOrFail($id);
@@ -76,7 +82,7 @@ class PostController extends Controller
     public function destroy($id)
     {
         $post = Post::findOrFail($id);
-        $user = Auth::user();
+        $user = auth('api')->user();
         if ($user->id != $post->user_id)
             ResponseHelpers::unauthorized();
         $post->delete();
