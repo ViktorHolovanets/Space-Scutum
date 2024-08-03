@@ -16,12 +16,12 @@ export interface LoginResponse {
 export interface Comment {
     id: string;
     body: string;
-    user_id: string;
+    user: string;
     post_id: string;
     created_at: string; 
     updated_at: string; 
   }
-  
+ 
   export interface UserRegister {
     id: string;
     name: string;

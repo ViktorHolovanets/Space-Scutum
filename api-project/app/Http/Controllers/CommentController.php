@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\CommentResource;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
@@ -20,7 +21,7 @@ class CommentController extends Controller
      */
     public function index()
     {
-        return ResponseHelpers::success(Comment::with("user")->latest()->paginate(10));
+        return ResponseHelpers::success(CommentResource::collection(Comment::with("user")->latest()->paginate(10)));
     }
 
     /**
@@ -44,7 +45,7 @@ class CommentController extends Controller
             'user_id' => $user->id,
             'post_id' => $post->id,
         ]);
-        return ResponseHelpers::created(['comment' => $comment]);
+        return ResponseHelpers::created(CommentResource::collection($comment));
     }
 
     /**
@@ -52,7 +53,7 @@ class CommentController extends Controller
      */
     public function show(string $id)
     {
-        return ResponseHelpers::success(Comment::with("comments")->find($id));
+        return ResponseHelpers::success(new CommentResource(Comment::with("comments")->find($id)));
     }
 
     /**
@@ -78,7 +79,7 @@ class CommentController extends Controller
             return ResponseHelpers::badRequest();
         }
         $comment->update($validated);
-        return ResponseHelpers::success($comment);
+        return ResponseHelpers::success(new CommentResource($comment));
     }
 
 

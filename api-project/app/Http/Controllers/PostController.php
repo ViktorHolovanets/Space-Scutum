@@ -54,7 +54,7 @@ class PostController extends Controller
      */
     public function show(string $id)
     {
-        return ResponseHelpers::success(PostResource::collection(Post::with("comments")->find($id)));
+        return ResponseHelpers::success(new PostResource(Post::with("comments")->find($id)));
     }
 
     /**
@@ -72,7 +72,7 @@ class PostController extends Controller
             ResponseHelpers::unauthorized();
         $post = Post::findOrFail($id);
         $post->update($validated);
-        return ResponseHelpers::success(PostResource::collection($post));
+        return ResponseHelpers::success(new PostResource($post));
     }
 
     /**

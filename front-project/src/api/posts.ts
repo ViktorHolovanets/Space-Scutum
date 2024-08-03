@@ -33,9 +33,9 @@ async function getPostById(id: string): Promise<Post> {
   }
 }
 
-async function updatePost(id: string, title?: string, body?: string): Promise<Post> {
+async function updatePost(postUp:Post): Promise<Post> {
   try {
-    const response = await api.put<ApiResponse<Post>>(`/post/${id}`, { title, body })
+    const response = await api.put<ApiResponse<Post>>(`/post/${postUp.id}`, { title:postUp.title, body:postUp.body, user_id:localStorage.getItem('id')})
     const post = handleResponse(response)
     return post
   } catch (error) {

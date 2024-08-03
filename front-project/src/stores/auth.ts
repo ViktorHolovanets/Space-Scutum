@@ -1,90 +1,103 @@
-import { defineStore } from 'pinia';
-import { ref } from 'vue';
-import { login, register, logout, refresh } from '@/api/auth';
-import type { User } from '@/types';
-import { deleteUser } from '@/api/user';
-
+import { defineStore } from 'pinia'
+import { ref } from 'vue'
+import { login, register, logout, refresh } from '@/api/auth'
+import type { LoginResponse, User } from '@/types'
+import { deleteUser } from '@/api/user'
 
 export const useAuthStore = defineStore('auth', () => {
-  const user = ref<User | null>(null);
-  const token = ref<string | null>(localStorage.getItem('token')??null);
-  const IsActive = ref<Boolean>(localStorage.getItem('token')!=null);
-  const status = ref<string>('idle'); // idle, loading, success, error
+  const userId = ref<string | null>(localStorage.getItem('id') ?? null)
+  const userName = ref<string | null>(localStorage.getItem('name') ?? null)
+  const token = ref<string | null>(localStorage.getItem('token') ?? null)
+  const status = ref<string>('idle') // idle, loading, success, error
 
   const loginUser = async (email: string, password: string) => {
-    status.value = 'loading';
+    status.value = 'loading'
     try {
-      const response = await login(email, password);
-      
-      user.value = response.user;
-      token.value = response.authorisation?.token || null;
-      IsActive.value=true;
-      localStorage.setItem('token', token.value || '');
-  
-      status.value = 'success';
+      const response = await login(email, password)
+      writeUser(response);
+      status.value = 'success'
     } catch (error) {
-      status.value = 'error';
-      console.error('Login error:', error);
+      status.value = 'error'
+      console.error('Login error:', error)
     }
-  };
+  }
 
   const registerUser = async (name: string, email: string, password: string) => {
-    status.value = 'loading';
+    status.value = 'loading'
     try {
-      const response = await register(name, email, password);
-      IsActive.value=true;
-      user.value = response.user;
-      token.value = response.authorisation?.token || null;
-      localStorage.setItem('token', token.value || '');
-      status.value = 'success';
+      const response = await register(name, email, password)
+      writeUser(response);
+      status.value = 'success'
     } catch (error) {
-      status.value = 'error';
-      console.error('Registration error:', error);
+      status.value = 'error'
+      console.error('Registration error:', error)
     }
-  };
+  }
 
   const logoutUser = async () => {
-    status.value = 'loading';
+    status.value = 'loading'
     try {
-      await logout();
-      NullableUser();
-      status.value = 'success';
+      await logout()
+
+      status.value = 'success'
     } catch (error) {
-      status.value = 'error';
-      console.error('Logout error:', error);
+      status.value = 'error'
+      console.error('Logout error:', error)
     }
-  };
+    NullableUser()
+  }
 
   const DeleteUser = async () => {
-    status.value = 'loading';
+    status.value = 'loading'
     try {
-      await deleteUser();
-      NullableUser();
-      status.value = 'success';
+      await deleteUser()
+      NullableUser()
+      status.value = 'success'
     } catch (error) {
-      status.value = 'error';
-      console.error('Logout error:', error);
+      status.value = 'error'
+      console.error('Logout error:', error)
     }
-  };
-  const NullableUser = async () => {
-      user.value = null;
-      token.value = null;
-      IsActive.value=false;
-      localStorage.removeItem('token');
-  };
-  const refreshToken = async () => {
-    status.value = 'loading';
-    try {
-      const response = await refresh();
-      user.value = response?.user??null;
-      token.value = response?.authorisation?.token || null;
-      localStorage.setItem('token', token.value || '');
-      status.value = 'success';
-    } catch (error) {
-      status.value = 'error';
-      console.error('Token refresh error:', error);
-    }
-  };
+  }
 
-  return { user, token, status,IsActive, loginUser, registerUser, logoutUser, refreshToken, DeleteUser };
-});
+  const refreshToken = async () => {
+    status.value = 'loading'
+    try {
+      const response = await refresh()
+      writeUser(response);
+      status.value = 'success'
+    } catch (error) {
+      status.value = 'error'
+      console.error('Token refresh error:', error)
+    }
+  }
+
+  const NullableUser = async () => {
+    userId.value = null
+    userName.value = null
+    token.value = null
+    localStorage.removeItem('token')
+    localStorage.removeItem('id')
+    localStorage.removeItem('name')
+  }
+  const writeUser = async (response: LoginResponse) => {
+    userId.value = response.user.id??null
+    userName.value = response.user.name??null
+    token.value = response.authorisation?.token || null
+  
+    localStorage.setItem('token', token.value || '')
+    localStorage.setItem('id', userId.value || '')
+    localStorage.setItem('name', userName.value || '')
+  }
+  return {
+    userId,
+    userName,
+    token,
+    status,
+
+    loginUser,
+    registerUser,
+    logoutUser,
+    refreshToken,
+    DeleteUser
+  }
+})

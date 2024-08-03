@@ -7,6 +7,8 @@ const name = ref('');
 const password = ref('');
 const authStore = useAuthStore();
 const handleRegister = () => {
+  if (email.value.trim() === "" || password.value.trim() === ""|| name.value.trim() === "")
+    return;
   authStore.registerUser(name.value, email.value, password.value)
 }
 </script>

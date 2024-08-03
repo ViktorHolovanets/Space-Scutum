@@ -21,9 +21,9 @@ const toggleRegister = () => {
 
 <template>
     <header
-        class="sticky top-0 z-20 flex w-full justify-between shadow-md  backdrop-blur-md my-8 rounded-lg bg-slate-500">
+        class="sticky top-0 z-20 flex w-full justify-between shadow-md  backdrop-blur-md mt-8 mb-1 rounded-lg bg-slate-500">
         <img src="../../assets/My blog.png" class="w-[35px] m-2 rounded-lg" alt="logo">
-        <div v-if="useStore.IsActive" class="relative">
+        <div v-if="useStore.token!=null" class="relative">
             <MenuComponent />
         </div>
         <div v-else class="flex">

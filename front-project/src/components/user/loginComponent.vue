@@ -5,6 +5,8 @@ const email = ref('');
 const password = ref('');
 const authStore = useAuthStore();
 const handleLogin = () => {
+  if (email.value.trim() === "" || password.value.trim() === "")
+    return;
   authStore.loginUser(email.value, password.value);
 };
 </script>
@@ -38,9 +40,6 @@ const handleLogin = () => {
         class="w-full py-2 bg-purple-600 text-white font-semibold rounded-md hover:bg-purple-500 focus:outline-none focus:ring-2 focus:ring-purple-400 my-2"
         @click="handleLogin">Submit</button>
     </div>
-
-
-
     <p v-if="authStore.status === 'loading'" class="text-gray-600 mt-4">Loading...</p>
     <p v-if="authStore.status === 'error'" class="text-red-600 mt-4">Error occurred</p>
   </div>
