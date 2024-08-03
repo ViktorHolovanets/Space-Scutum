@@ -10,7 +10,7 @@ class Post extends Model
 {
     protected $keyType = 'string';
     public $incrementing = false;
-    protected $fillable = ['body', 'user_id'];
+    protected $fillable = ['id','title', 'body', 'user_id'];
     use HasFactory;
     public function user()
     {

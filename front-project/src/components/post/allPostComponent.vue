@@ -8,7 +8,7 @@ postsStore.loadPosts(1);
 </script>
 <template>
     <div class="content  flex flex-wrap justify-around mx-auto">        
-        <cardPostComponent v-for="item in postsStore.posts" :key="item.id" :author="item.user.name" :title="item.title" :comments="item.comments.length"/>
+        <cardPostComponent v-for="item in postsStore.posts" :key="item.id" :post="item"/>
     </div>
     <div></div>
 </template>

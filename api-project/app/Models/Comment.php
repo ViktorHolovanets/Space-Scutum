@@ -9,7 +9,7 @@ class Comment extends Model
 {
     protected $keyType = 'string';
     public $incrementing = false;
-    protected $fillable = ['post_id', 'body', 'user_id'];
+    protected $fillable = ['id','post_id', 'body', 'user_id'];
     use HasFactory;
     public function posts(){
         return $this->belongsTo(Post::class);

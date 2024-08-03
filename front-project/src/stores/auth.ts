@@ -8,7 +8,7 @@ import { deleteUser } from '@/api/user';
 export const useAuthStore = defineStore('auth', () => {
   const user = ref<User | null>(null);
   const token = ref<string | null>(localStorage.getItem('token')??null);
-  const IsActive = ref<Boolean>(false);
+  const IsActive = ref<Boolean>(localStorage.getItem('token')!=null);
   const status = ref<string>('idle'); // idle, loading, success, error
 
   const loginUser = async (email: string, password: string) => {
@@ -20,6 +20,7 @@ export const useAuthStore = defineStore('auth', () => {
       token.value = response.authorisation?.token || null;
       IsActive.value=true;
       localStorage.setItem('token', token.value || '');
+  
       status.value = 'success';
     } catch (error) {
       status.value = 'error';

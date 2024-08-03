@@ -6,7 +6,6 @@ use App\Helpers\ResponseHelpers;
 use Illuminate\Http\Request;
 use App\Http\Resources\PostResource;
 use App\Models\Post;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 
 class PostController extends Controller
@@ -42,12 +41,12 @@ class PostController extends Controller
         $user = auth('api')->user();
 
         $post = Post::create([
-            'id' => (string) Str::uuid(),
+            'id' => Str::uuid(),
             'title' => $validated['title'],
             'body' => $validated['body'],
             'user_id' => $user->id,
         ]);
-        return ResponseHelpers::created(PostResource::collection($post));
+        return ResponseHelpers::created(PostResource::collection([$post]));
     }
 
     /**

@@ -8,10 +8,14 @@ const modal = useModalBooleanStore();
 const title = ref('');
 const body = ref('');
 const createPostHandle = async () => {
-  await createPost(title.value, body.value)
-  modal.closeModal();
-  title.value = '';
-  body.value = '';
+  try {
+    await createPost(title.value, body.value);
+    modal.closeModal(); // Закриваємо модальне вікно після створення посту
+    title.value = ''; // Очищаємо поля форми
+    body.value = '';
+  } catch (error) {
+    console.error('Failed to create post:', error);
+  }
 }
 </script>
 
@@ -26,20 +30,21 @@ const createPostHandle = async () => {
       </button>
 
       <h2 class="text-xl font-semibold mb-4">Create Post</h2>
-      <form>
+      <div>
         <div class="mb-4">
           <label for="title" class="block text-gray-700 font-medium mb-2">Title</label>
-          <input type="text" id="title" class="w-full border border-gray-300 p-2 rounded" placeholder="Post Title">
+          <input type="text" v-model="title" class="w-full border border-gray-300 p-2 rounded" placeholder="Post Title">
         </div>
         <div class="mb-4">
           <label for="content" class="block text-gray-700 font-medium mb-2">Content</label>
-          <textarea id="content" rows="4" class="w-full border border-gray-300 p-2 rounded"
+          <textarea id="content" rows="4" v-model="body" class="w-full border border-gray-300 p-2 rounded"
             placeholder="Post Content"></textarea>
         </div>
         <div class="flex justify-end">
-          <button  @click="createPostHandle" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Create Post</button>
+          <button @click="createPostHandle" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Create
+            Post</button>
         </div>
-      </form>
+      </div>
     </div>
   </div>
 </template>

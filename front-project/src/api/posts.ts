@@ -12,9 +12,9 @@ async function getPosts(page: number = 1): Promise<PaginatedPostsResponse> {
   }
 }
 
-async function createPost(title: string, body: string): Promise<Post> {
+async function createPost(title: string, body: string): Promise<Post[]> {
   try {
-    const response = await api.post<ApiResponse<Post>>('/posts', { title, body });
+    const response = await api.post<ApiResponse<Post[]>>('/post', { title, body });
     const post = handleResponse(response);
     return post;
   } catch (error) {
@@ -25,7 +25,7 @@ async function createPost(title: string, body: string): Promise<Post> {
 
 async function getPostById(id: string): Promise<Post> {
   try {
-    const response = await api.get<ApiResponse<Post>>(`/posts/${id}`)
+    const response = await api.get<ApiResponse<Post>>(`/post/${id}`)
     const post = handleResponse(response)
     return post
   } catch (error) {
@@ -35,7 +35,7 @@ async function getPostById(id: string): Promise<Post> {
 
 async function updatePost(id: string, title?: string, body?: string): Promise<Post> {
   try {
-    const response = await api.put<ApiResponse<Post>>(`/posts/${id}`, { title, body })
+    const response = await api.put<ApiResponse<Post>>(`/post/${id}`, { title, body })
     const post = handleResponse(response)
     return post
   } catch (error) {
@@ -45,7 +45,7 @@ async function updatePost(id: string, title?: string, body?: string): Promise<Po
 
 async function deletePost(id: string): Promise<void> {
   try {
-    await api.delete<ApiResponse<null>>(`/posts/${id}`)
+    await api.delete<ApiResponse<null>>(`/post/${id}`)
   } catch (error) {
     throw error
   }
