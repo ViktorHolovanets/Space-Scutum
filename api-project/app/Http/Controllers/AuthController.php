@@ -9,12 +9,13 @@ use Illuminate\Support\Facades\Hash;
 use App\Models\User;
 use App\Helpers\ResponseHelpers;
 use Illuminate\Support\Str;
+use PHPOpenSourceSaver\JWTAuth\Facades\JWTAuth;
 
 class AuthController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('auth:api', ['except' => ['login', 'register']]);
+        $this->middleware('auth:api', ['except' => ['login', 'register','refresh']]);
     }
 
     public function login(Request $request)

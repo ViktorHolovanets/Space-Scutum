@@ -37,7 +37,8 @@ export const logout = async () => {
 export const refresh = async () => {
   try {
     const response = await api.post<ApiResponse<LoginResponse>>('/refresh')
-    return handleResponse(response)
+    const res=handleResponse(response);
+    return res;
   } catch (error) {
     console.error('Refresh token error:', error)
     throw error

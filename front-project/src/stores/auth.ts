@@ -63,12 +63,12 @@ export const useAuthStore = defineStore('auth', () => {
     status.value = 'loading'
     try {
       const response = await refresh()
-      writeUser(response);
+      token.value = response.authorisation?.token??null;
+      localStorage.setItem('token', `${response.authorisation?.token}`)
       status.value = 'success'
     } catch (error) {
       NullableUser()
       status.value = 'error'
-      console.error('Token refresh error:', error)
     }
   }
 
@@ -81,9 +81,9 @@ export const useAuthStore = defineStore('auth', () => {
     localStorage.removeItem('name')
   }
   const writeUser = async (response: LoginResponse) => {
-    userId.value = response.user.id??null
-    userName.value = response.user.name??null
-    token.value = response.authorisation?.token || null
+    userId.value = response?.user.id??null
+    userName.value = response?.user.name??null
+    token.value = response?.authorisation?.token || null
   
     localStorage.setItem('token', token.value || '')
     localStorage.setItem('id', userId.value || '')
@@ -94,7 +94,7 @@ export const useAuthStore = defineStore('auth', () => {
     userName,
     token,
     status,
-
+    NullableUser,
     loginUser,
     registerUser,
     logoutUser,

@@ -2,13 +2,16 @@
 import { usePostsStore } from '@/stores/posts';
 import { createPost } from '@/api/posts';
 import { computed, ref, watch } from 'vue';
+import { useAuthStore } from '@/stores/auth';
 
-
+const storeAuth=useAuthStore()
 const store = usePostsStore();
 const title = ref('');
 const body = ref('');
 const isUpdate = computed(() => store.currentPost !== null);
-
+const isOpen=computed(()=>{
+  return store.isModalWindowPostOpen && storeAuth.token
+})
 watch(
   () => store.currentPost,
   (newPost) => {
@@ -43,7 +46,7 @@ const updatePostHandle = async () => {
 </script>
 
 <template>
-  <div v-if="store.isModalWindowPostOpen"
+  <div v-if="isOpen"
     class=" fixed inset-0 flex items-center justify-center bg-black bg-opacity-60">
     <div class="modal-content bg-white p-6 rounded-lg shadow-lg max-w-lg w-full relative">
       <button @click="store.closeModal" class="absolute z-10 rounded-full top-4 right-4 text-gray-500 hover:bg-red-700">
