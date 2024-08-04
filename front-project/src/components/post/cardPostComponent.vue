@@ -2,7 +2,7 @@
 import { defineProps, computed } from 'vue';
 import type { Post } from '@/types';
 import { useAuthStore } from '@/stores/auth';
-import EditDeleteComponent from '../editDeleteComponent.vue';
+import EditDeleteComponent from '../ui-components/editDeleteComponent.vue';
 import { usePostsStore } from '@/stores/posts';
 const storePost = usePostsStore();
 const props = defineProps<{

@@ -30,7 +30,6 @@ class CommentController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'title' => 'required|string|max:255',
             'body' => 'required|string',
             'post_id' => 'required|uuid',
         ]);
@@ -45,7 +44,7 @@ class CommentController extends Controller
             'user_id' => $user->id,
             'post_id' => $post->id,
         ]);
-        return ResponseHelpers::created(CommentResource::collection($comment));
+        return ResponseHelpers::created(new CommentResource($comment));
     }
 
     /**

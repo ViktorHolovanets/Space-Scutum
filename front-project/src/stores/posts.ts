@@ -1,7 +1,9 @@
 import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
-import type { Post } from '@/types'
+import type { Comment, Post } from '@/types'
 import { getPosts, deletePost, updatePost } from '@/api/posts'
+import { addComment, deleteComment } from '@/api/commen'
+
 
 export const usePostsStore = defineStore('posts', () => {
   const posts = ref<Post[]>([])
@@ -86,6 +88,32 @@ export const usePostsStore = defineStore('posts', () => {
     }
   }
 
+  const addCommentToPost = async (body: string, postId: string) => {
+    try {
+      const newComment = await addComment(body, postId)
+      const post = posts.value.find((post) => post.id === newComment.post_id);
+      if (post) {
+        post.comments.push(newComment);
+        currentPost.value=post;      
+      }
+    } catch (error) {
+      console.error('Failed to delete post:', error)
+    }
+  }
+  const deleteCommentFromPost = async (commentId: string, postId: string) => {
+    try {
+      await deleteComment(commentId);
+      const post = posts.value.find(post => post.id === postId);
+      if (post) {
+        post.comments = post.comments.filter(comment => comment.id !== commentId);
+        currentPost.value = { ...post };
+      }
+    } catch (error) {
+      console.error('Failed to delete comment:', error);
+    }
+  }
+  
+
   return {
     posts,
     currentPage,
@@ -101,8 +129,10 @@ export const usePostsStore = defineStore('posts', () => {
     removePost,
     update,
     updateLocalPost,
+    deleteCommentFromPost,
     loadPosts,
     nextPage,
-    previousPage
+    previousPage,
+    addCommentToPost
   }
 })

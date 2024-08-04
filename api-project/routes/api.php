@@ -23,7 +23,7 @@ Route::middleware('auth:sanctum')->get('/api/user', function (Request $request) 
 
 Route::apiResources([
     "post" => PostController::class,
-    "coment" => CommentController::class,
+    "comment" => CommentController::class,
 ]);
 Route::middleware(['auth:api'])->group(function () {
     Route::put('/user', [UserController::class, 'update']);

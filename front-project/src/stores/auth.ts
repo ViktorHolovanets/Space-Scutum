@@ -66,6 +66,7 @@ export const useAuthStore = defineStore('auth', () => {
       writeUser(response);
       status.value = 'success'
     } catch (error) {
+      NullableUser()
       status.value = 'error'
       console.error('Token refresh error:', error)
     }

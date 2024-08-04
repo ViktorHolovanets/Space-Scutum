@@ -7,7 +7,7 @@ const isLoading=computed(()=>{
 })
 </script>
 <template>
-    <div v-if="isLoading" class=" fixed inset-0 flex items-center justify-center bg-black bg-opacity-60">
+    <div v-if="isLoading" class=" fixed inset-0 flex items-center justify-center bg-black bg-opacity-60 z-50">
         <div class="loader">
             <div class="circle"></div>
             <div class="circle"></div>

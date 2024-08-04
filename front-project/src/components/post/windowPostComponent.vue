@@ -22,7 +22,6 @@ watch(
   },
   { immediate: true }
 );
-console.log(store.currentPost)
 const createPostHandle = async () => {
   try {
     await createPost(title.value, body.value);
