@@ -14,7 +14,7 @@ const handleRegister = () => {
 </script>
 <template>
   <div class="flex flex-col gap-4 max-w-md p-6 rounded-lg bg-purple-700 w-[315px] text-white border border-gray-800">
-    <p class="text-2xl font-semibold text-blue-400 relative pl-8">
+    <p class="text-2xl font-semibold bg-green-500 relative pl-8">
       Register
     </p>
     <label class="relative">
